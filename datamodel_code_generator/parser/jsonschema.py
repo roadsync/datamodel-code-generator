@@ -320,9 +320,12 @@ class JsonSchemaParser(Parser):
                     "".format(format__, type_)
                 )
                 data_formats = json_schema_data_formats[type_]['default']
-            return self.data_type_manager.get_data_type(
-                data_formats, **obj.dict() if not self.field_constraints else {},
-            )
+            try:
+                return self.data_type_manager.get_data_type(
+                    data_formats, **obj.dict() if not self.field_constraints else {},
+                )
+            except KeyError as ke:
+                raise
 
         if isinstance(obj.type, list):
             return self.data_type(
